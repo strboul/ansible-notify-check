@@ -1,0 +1,17 @@
+- name: Test module
+  hosts: localhost
+  collections:
+    - strboul.ansible_check_notify
+  tasks:
+    - name: Run module
+      strboul.ansible_check_notify.main:
+        id: test
+        condition: "[[ 1 == 1 ]]"
+        message: |
+          Condition is truthy.
+
+          Lang is $LANG.
+          Now is $(date).
+        timer:
+          OnCalendar: "*-*-* *:*:00"
+          Persistent: true

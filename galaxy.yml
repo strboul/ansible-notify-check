@@ -1,0 +1,21 @@
+---
+# See: https://docs.ansible.com/ansible/latest/dev_guide/collections_galaxy_meta.html#collections-galaxy-meta
+namespace: strboul
+name: ansible_check_notify
+version: 0.1.0
+description: Check a command and send a notification on desktop.
+readme: README.md
+authors:
+  - Metin Yazici (https://github.com/strboul/)
+license:
+  - MIT
+license_file: LICENSE
+tags:
+  - module
+  - util
+  - notify-send
+  - systemd
+  - systemd-timer
+homepage: https://github.com/strboul/ansible-check-notify
+repository: https://github.com/strboul/ansible-check-notify
+issues: https://github.com/strboul/ansible-check-notify/issues
