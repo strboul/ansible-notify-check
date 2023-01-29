@@ -1,10 +1,10 @@
 - name: Test module
   hosts: localhost
   collections:
-    - strboul.ansible_check_notify
+    - strboul.ansible_notify_check
   tasks:
     - name: Run module
-      strboul.ansible_check_notify.main:
+      strboul.notify.check:
         id: test
         condition: "[[ 1 == 1 ]]"
         message: |
@@ -14,4 +14,3 @@
           Now is $(date).
         timer:
           OnCalendar: "*-*-* *:*:00"
-          Persistent: true
