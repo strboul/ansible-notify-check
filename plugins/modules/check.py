@@ -6,7 +6,7 @@ import textwrap
 
 from ansible.module_utils.basic import AnsibleModule
 
-MODULE_NAME = "ansible-check-notify"
+MODULE_NAME = "ansible-notify-check"
 
 
 def get_systemd_config_dir():
@@ -27,9 +27,24 @@ def make_safe_cmd(cmd):
     return cmd.replace('"', '\\"').replace("'", "\\'").replace("\n", "\\n")
 
 
-def make_cmd_notify_send(*, title, body):
-    body = "\n" + body if body is not None else ""
-    return f'notify-send "{title}" "{body}"'
+def make_notify_send_cmd(*, title, message, condition, options):
+    notify_cmd = 'notify-send '
+    if options is not None:
+        options_map = { 'expire_time': 'expire-time' }
+        options_cmd = ''
+        for key, value in options.items():
+            if value is not None:
+                if key in options_map.keys():
+                    key = options_map[key]
+                options_cmd += f'--{key}={value} '
+        notify_cmd += options_cmd
+    if title is not None:
+        notify_cmd += f'"{title}" '
+    if message is not None:
+        notify_cmd += f'"{message}" '
+    if condition is not None:
+        notify_cmd = f"if {condition}; then {notify_cmd}; fi"
+    return notify_cmd
 
 
 def template_systemd_unit_files(*, id, cmd, timer_dict):
@@ -84,13 +99,28 @@ def enable_systemd_timer(module, unit_name):
 
 
 def main():
-    module = AnsibleModule(
-        argument_spec={
-            "id": {"type": "str", "required": True},
-            "condition": {"type": "str", "required": True},
-            "message": {"type": "str"},
-            "timer": {"type": "dict"},
+    argument_options = {
+        "type": "dict",
+        "options": {
+            "urgency": {
+                "type": "str",
+                "choices": ["low", "normal", "critical"],
+            },
+            "icon": {"type": "str"},
+            "expire_time": {"type": "int"},
         },
+    }
+
+    argument_spec = {
+        "id": {"type": "str", "required": True},
+        "condition": {"type": "str"},
+        "message": {"type": "str"},
+        "options": argument_options,
+        "timer": {"type": "dict"},
+    }
+
+    module = AnsibleModule(
+        argument_spec=argument_spec,
         supports_check_mode=True,
     )
 
@@ -103,14 +133,14 @@ def main():
     arg_id = module.params["id"]
     arg_condition = module.params["condition"]
     arg_message = module.params["message"]
+    arg_options = module.params["options"]
     arg_timer = module.params["timer"]
 
-    cmd_rc, _, _ = module.run_command(arg_condition, use_unsafe_shell=True)
-    if cmd_rc != 0:
-        module.exit_json(changed=False, msg="")
-
-    notify_cmd = make_cmd_notify_send(
-        title=f"[{MODULE_NAME}] {arg_id}", body=arg_message
+    notify_cmd = make_notify_send_cmd(
+        title=f"[{MODULE_NAME}] {arg_id}",
+        message=arg_message,
+        condition=arg_condition,
+        options=arg_options,
     )
 
     if arg_timer is None:
