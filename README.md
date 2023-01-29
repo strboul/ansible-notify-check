@@ -15,7 +15,7 @@ it can send time-based notifications.
 | `id`                  | yes      | str  | unique service and timer id. |
 | `condition`           | no       | str  | condition to trigger this check. If condition field exists and if it's a truthy value, the check runs. |
 | `message`             | no       | str  | message to display in the notifier. The bash variables are expanded.  |
-| `options`             | no       | dict | [notify-send options](https://man.archlinux.org/man/notify-send.1.en#OPTIONS). |
+| `options`             | no       | dict | a dictionary to define [notify-send options](https://man.archlinux.org/man/notify-send.1.en#OPTIONS). |
 | `options.urgency`     | no       | str  | Specifies the urgency level (low, normal, critical).
 | `options.icon`        | no       | str  | icon file name from the locations `$HOME/.icons`, `$HOME/.local/share/icons`, `/usr/local/share/icons`, `/usr/share/icons`. |
 | `options.expire_time` | no       | int  | duration in milliseconds for the notification to appear on screen. |
@@ -30,7 +30,7 @@ it can send time-based notifications.
     id: test
     condition: "[[ 1 == 1 ]]"
     message: |
-      This notification is shown 1 minute after the boot and then every 10
+      This notification is shown 1 minute after the boot and then every 5
       minutes after the first run.
 
       You can use shell parameter expansion.
@@ -43,8 +43,8 @@ it can send time-based notifications.
       urgency: critical
       icon: user-info
     timer:
-      OnBootSec=1min
-      OnUnitActiveSec=10min
+      OnBootSec: 1min
+      OnUnitActiveSec: 5min
 ```
 
 ## Installation
@@ -63,6 +63,7 @@ ansible-galaxy install https://github.com/strboul/ansible-notify-check.git
 ansible-galaxy collection build .
 ansible-galaxy collection install strboul-notify-*.tar.gz
 ansible-playbook tests/*
+# rm -rf ~/.ansible/collections/ansible_collections/strboul/notify
 ```
 
 #### Debugging

@@ -4,8 +4,7 @@
     "condition": "[[ 1 == 1 ]]",
     "message": "Condition is truthy.\n\nLang is $LANG.\nNow is $(date)",
     "timer": {
-      "OnCalendar": "*-*-* *:*:00",
-      "Persistent": "true"
+      "OnCalendar": "*-*-* *:*:00"
     }
   }
 }

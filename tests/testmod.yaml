@@ -3,14 +3,23 @@
   collections:
     - strboul.ansible_notify_check
   tasks:
-    - name: Run module
+    - name: Check condition and notify
       strboul.notify.check:
         id: test
         condition: "[[ 1 == 1 ]]"
         message: |
-          Condition is truthy.
+          This notification is shown 1 minute after the boot and then every 10
+          minutes after the first run.
 
-          Lang is $LANG.
-          Now is $(date).
+          You can use shell parameter expansion.
+          Lang is "$LANG".
+          Now is "$(date)".
+
+          Also ansible variables.
+          Home is {{ ansible_env.HOME }}.
+        options:
+          urgency: critical
+          icon: user-info
         timer:
-          OnCalendar: "*-*-* *:*:00"
+          OnBootSec: 1min
+          OnUnitActiveSec: 5min
