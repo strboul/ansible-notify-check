@@ -13,7 +13,10 @@ def get_systemd_config_dir():
     config_dir = os.environ.get("XDG_CONFIG_DIR") or pathlib.Path(
         os.environ["HOME"], ".config"
     )
-    return pathlib.Path(config_dir, "systemd", "user")
+    dir = pathlib.Path(config_dir, "systemd", "user")
+    # create systemd user config dir if not exists.
+    dir.mkdir(parents=True, exist_ok=True)
+    return dir
 
 
 SYSTEMD_CONFIG_DIR = get_systemd_config_dir()
