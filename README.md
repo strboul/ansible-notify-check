@@ -57,6 +57,8 @@ ansible-galaxy install https://github.com/strboul/ansible-notify-check.git
 
 <details>
 
+- Bump the `version` in the `galaxy.yml` file.
+
 #### Run tests
 
 ```sh

@@ -26,9 +26,9 @@ def util_format(lines):
     return "\n".join([textwrap.dedent(line) for line in lines.strip().split("\n")])
 
 
+# TODO: use shlex package
 def make_safe_cmd(cmd):
     return cmd.replace('"', '\\"').replace("'", "\\'").replace("\n", "\\n")
-
 
 def make_notify_send_cmd(*, title, message, condition, options):
     notify_cmd = 'notify-send '
@@ -139,10 +139,12 @@ def main():
     arg_options = module.params["options"]
     arg_timer = module.params["timer"]
 
+    safe_condition = make_safe_cmd(arg_condition)
+
     notify_cmd = make_notify_send_cmd(
         title=f"[{MODULE_NAME}] {arg_id}",
         message=arg_message,
-        condition=arg_condition,
+        condition=safe_condition,
         options=arg_options,
     )
 

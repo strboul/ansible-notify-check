@@ -2,7 +2,7 @@
 # See: https://docs.ansible.com/ansible/latest/dev_guide/collections_galaxy_meta.html#collections-galaxy-meta
 namespace: strboul
 name: notify
-version: 0.1.0
+version: 0.1.1
 description: Check a command and send a notification on desktop.
 readme: README.md
 authors:
