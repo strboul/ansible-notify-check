@@ -1,5 +1,9 @@
 # ansible-notify-check
 
+:construction: This module is still work in progress :construction:
+
+---
+
 [Ansible module](https://docs.ansible.com/ansible/2.10/dev_guide/developing_locally.html#modules-and-plugins-what-is-the-difference)
 to send notifications periodically. Ideal for desktop environment setups.
 
